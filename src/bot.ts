@@ -1,12 +1,7 @@
 import "dotenv/config";
 import { Client, Events, GatewayIntentBits } from "discord.js";
-import pino from "pino";
-
-const logger = pino({
-  transport: {
-    target: "pino-pretty",
-  },
-});
+import { logger } from "./logger.ts";
+import { CommandHandler } from "./CommandHandler.ts";
 
 const client = new Client({
   intents: [
@@ -21,6 +16,9 @@ const client = new Client({
     GatewayIntentBits.GuildScheduledEvents,
   ],
 });
+
+const commandHandler = new CommandHandler({});
+await commandHandler.registerCommands(client, "342309270139830272");
 
 client.once(Events.ClientReady, (c) => {
   logger.info(`Connected as ${c.user?.username}`);

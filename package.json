@@ -1,6 +1,6 @@
 {
   "name": "omnibot",
-  "module": "bot.ts",
+  "module": "src/bot.ts",
   "type": "module",
   "devDependencies": {
     "bun-types": "latest",
@@ -16,6 +16,6 @@
     "pino": "^8.16.1"
   },
   "scripts": {
-    "dev": "bun --watch bot.ts"
+    "dev": "bun --watch src/bot.ts"
   }
 }
