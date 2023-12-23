@@ -11,17 +11,25 @@ import path from "path";
 import fs from "fs";
 import { logger } from "./logger.ts";
 
-export interface CommandSetupData {
+export interface CommandBuildData {
   // empty for now
 }
 
 export type Command = (
   interaction: ChatInputCommandInteraction,
 ) => Promise<void>;
-export type CommandSetup = (data: CommandSetupData) => SlashCommandBuilder;
+
+export type CommandBuilder = Omit<
+  SlashCommandBuilder,
+  "addSubcommand" | "addSubcommandGroup"
+>;
+
+export type CommandBuilderFactory = (data: CommandBuildData) => CommandBuilder;
+
 export type CommandGuard = (
   interaction: ChatInputCommandInteraction,
 ) => Promise<boolean>;
+
 export type CommandDescription =
   RESTPostAPIChatInputApplicationCommandsJSONBody; // This type name is hilarious
 
@@ -38,12 +46,12 @@ export class CommandHandler {
   }
 
   private async createCommand(
-    data: CommandSetupData,
-    setup: CommandSetup,
+    data: CommandBuildData,
+    builderFactory: CommandBuilderFactory,
     commandBody: Command,
     guard?: CommandGuard,
   ): Promise<{ description: CommandDescription; command: Command }> {
-    const description = setup(data).toJSON();
+    const description = builderFactory(data).toJSON();
     // Either wrap the command with a guard check (if provided) or just use the command
     const command = guard
       ? async (interaction: ChatInputCommandInteraction) => {
@@ -56,7 +64,7 @@ export class CommandHandler {
   }
 
   private async loadCommands(
-    setupData: CommandSetupData,
+    buildData: CommandBuildData,
   ): Promise<CommandDescription[]> {
     // TODO: Files inside subdirectories should become subcommands
     const commandFiles = await fs.promises.readdir(this.commandsDir);
@@ -65,17 +73,17 @@ export class CommandHandler {
 
     for (const file of commandFiles) {
       const commandDefinition = await import(path.join(this.commandsDir, file));
-      if (!commandDefinition.setup || !commandDefinition.default) {
+      if (!commandDefinition.build || !commandDefinition.default) {
         logger.warn(
-          `Command ${file} does not have a setup or default function, skipping...`,
+          `Command ${file} has no build function and/or default function defined, skipping...`,
         );
         continue;
       }
 
-      const { setup, default: commandBody, guard } = commandDefinition;
+      const { build, default: commandBody, guard } = commandDefinition;
       const { description, command } = await this.createCommand(
-        setupData,
-        setup,
+        buildData,
+        build,
         commandBody,
         guard,
       );
