@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import { logger } from "./logger.ts";
-import { CommandHandler } from "./CommandHandler.ts";
+import { CommandHandler } from "./framework/CommandHandler.ts";
 
 const client = new Client({
   intents: [

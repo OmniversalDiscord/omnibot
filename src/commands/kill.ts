@@ -1,8 +1,13 @@
 import { SlashCommandBuilder } from "discord.js";
-import type { ChatInputCommandInteraction } from "discord.js";
-import type { CommandBuilder } from "../CommandHandler.ts";
+import {
+  CommandBuilder,
+  Context,
+  guardError,
+  guardOk,
+  GuardResult,
+} from "../framework/types.ts";
 
-export function build(): CommandBuilder {
+export function register(): CommandBuilder {
   return new SlashCommandBuilder()
     .setName("kill")
     .setDescription("Kills a user (scary!)")
@@ -14,9 +19,17 @@ export function build(): CommandBuilder {
     );
 }
 
-export default async function kill(interaction: ChatInputCommandInteraction) {
+export function guard({ interaction }: Context): GuardResult {
+  if (interaction.member!.user.id === "131859790593785856") {
+    guardError("You can't kill the bot owner!");
+  }
+
+  return guardOk();
+}
+
+export default async function kill({ interaction }: Context) {
   const user = interaction.options.getUser("user", true);
   await interaction.reply(
-    `<@${interaction.user.id}> has been charged with the attempted murder of <@${user.id}> and is awaiting sentencing.`,
+    `<@${interaction.user}> has been charged with the attempted murder of <@${user}> and is awaiting sentencing.`,
   );
 }

@@ -5,33 +5,26 @@ import type {
 } from "discord.js";
 import type { RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
 import type { Client, Snowflake } from "discord.js";
+import type {
+  Command,
+  CommandBuilder,
+  CommandGuard,
+  Context,
+  ContextData,
+  RegistrationContext,
+} from "./types.ts";
 
 import { Collection, REST, Routes } from "discord.js";
 import path from "path";
 import fs from "fs";
-import { logger } from "./logger.ts";
+import { logger } from "../logger.ts";
+import { errorMessage } from "./helpers.ts";
 
-export interface CommandBuildData {
-  // empty for now
-}
+type CommandRegistrationFn = (
+  ContextData: RegistrationContext,
+) => Promise<CommandBuilder>;
 
-export type Command = (
-  interaction: ChatInputCommandInteraction,
-) => Promise<void>;
-
-export type CommandBuilder = Omit<
-  SlashCommandBuilder,
-  "addSubcommand" | "addSubcommandGroup"
->;
-
-export type CommandBuilderFactory = (data: CommandBuildData) => CommandBuilder;
-
-export type CommandGuard = (
-  interaction: ChatInputCommandInteraction,
-) => Promise<boolean>;
-
-export type CommandDescription =
-  RESTPostAPIChatInputApplicationCommandsJSONBody; // This type name is hilarious
+type CommandDescription = RESTPostAPIChatInputApplicationCommandsJSONBody; // This type name is hilarious
 
 export type CommandHandlerOptions = {
   commandsDir?: string;
@@ -40,31 +33,47 @@ export type CommandHandlerOptions = {
 export class CommandHandler {
   commandsDir: string;
   commands: Collection<string, Command> = new Collection();
+  restClient: REST;
+  contextData: ContextData = {};
 
-  constructor(options: CommandHandlerOptions) {
-    this.commandsDir = path.join(__dirname, options.commandsDir ?? "commands");
+  constructor(options: CommandHandlerOptions, contextData?: ContextData) {
+    this.commandsDir = path.join(
+      __dirname,
+      "../",
+      options.commandsDir ?? "commands",
+    );
+    this.contextData = contextData ?? {};
+    this.restClient = new REST({ version: "10" }).setToken(
+      process.env.DISCORD_TOKEN!,
+    );
   }
 
   private async createCommand(
-    data: CommandBuildData,
-    builderFactory: CommandBuilderFactory,
+    context: RegistrationContext,
+    register: CommandRegistrationFn,
     commandBody: Command,
     guard?: CommandGuard,
   ): Promise<{ description: CommandDescription; command: Command }> {
-    const description = builderFactory(data).toJSON();
+    const description = (await register(context)).toJSON();
+
     // Either wrap the command with a guard check (if provided) or just use the command
     const command = guard
-      ? async (interaction: ChatInputCommandInteraction) => {
-          if (await guard(interaction)) {
-            await command(interaction);
+      ? async (context: Context) => {
+          let result = await guard(context);
+          if (result.type === "error") {
+            await context.interaction.reply(errorMessage(result.message));
+            return;
           }
+
+          await commandBody(context);
         }
       : commandBody;
+
     return { description, command };
   }
 
   private async loadCommands(
-    buildData: CommandBuildData,
+    context: RegistrationContext,
   ): Promise<CommandDescription[]> {
     // TODO: Files inside subdirectories should become subcommands
     const commandFiles = await fs.promises.readdir(this.commandsDir);
@@ -73,17 +82,18 @@ export class CommandHandler {
 
     for (const file of commandFiles) {
       const commandDefinition = await import(path.join(this.commandsDir, file));
-      if (!commandDefinition.build || !commandDefinition.default) {
+      if (!commandDefinition.register || !commandDefinition.default) {
         logger.warn(
-          `Command ${file} has no build function and/or default function defined, skipping...`,
+          `Command ${file} has no register function and/or default function defined, skipping...`,
         );
         continue;
       }
 
-      const { build, default: commandBody, guard } = commandDefinition;
+      const { register, default: commandBody, guard } = commandDefinition;
+
       const { description, command } = await this.createCommand(
-        buildData,
-        build,
+        context,
+        register,
         commandBody,
         guard,
       );
@@ -107,16 +117,23 @@ export class CommandHandler {
     }
 
     logger.debug(`Handling command /${interaction.commandName}`);
-    await command(interaction);
+    await command({
+      interaction: interaction,
+      data: this.contextData,
+    });
   }
 
   public async registerCommands(client: Client, guildId: Snowflake) {
-    const commands = await this.loadCommands({});
-    const rest = new REST({ version: "10" }).setToken(
-      process.env.DISCORD_TOKEN!,
-    );
-    await rest.put(
-      Routes.applicationGuildCommands(process.env.APP_ID!, guildId),
+    const commands = await this.loadCommands({
+      restClient: this.restClient,
+      data: this.contextData,
+    });
+
+    await this.restClient.put(
+      Routes.applicationGuildCommands(
+        process.env.APP_ID! as Snowflake,
+        guildId,
+      ),
       { body: commands },
     );
 
