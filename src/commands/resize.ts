@@ -4,7 +4,6 @@ import {
   GuardData,
   guardError,
   guardOk,
-  GuardResult,
   RegistrationContext,
 } from "../framework/types.ts";
 import config from "config";
@@ -12,7 +11,6 @@ import {
   APIApplicationCommandOptionChoice,
   DiscordAPIError,
   EmbedBuilder,
-  GuildChannel,
   GuildMember,
   Routes,
   SlashCommandBuilder,
@@ -79,12 +77,14 @@ export async function register({
 }
 
 export function guard({ interaction }: Context) {
-  // Check if the user is either in the channel or is an admin
+  // Get the member and channel
   let member = interaction.member! as GuildMember;
   let channelId = interaction.options.getString("channel", true);
   let channel = interaction.guild?.channels.cache.get(
     channelId,
   ) as VoiceChannel;
+
+  // Check if the user is either in the channel or is an admin
   if (
     !channel.members.has(member.user.id) &&
     !member.roles.cache.some((r) => r.name === "Coffee Crew")
@@ -92,6 +92,7 @@ export function guard({ interaction }: Context) {
     return guardError(`You must be in ${channel.name} to use this command`);
   }
 
+  // Check if the new size is smaller than the current number of members
   let newSize = interaction.options.getInteger("size", true);
   if (channel.members.size > newSize) {
     return guardError(
@@ -106,6 +107,7 @@ export default async function resize({ fromGuard, interaction }: Context) {
   let { channel, newSize } = fromGuard as GuardData<typeof guard>;
 
   await channel.edit({ userLimit: newSize });
+
   await interaction.reply({
     embeds: [
       new EmbedBuilder()
