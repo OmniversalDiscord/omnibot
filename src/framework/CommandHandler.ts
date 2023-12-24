@@ -19,6 +19,7 @@ import path from "path";
 import fs from "fs";
 import { logger } from "../logger.ts";
 import { errorMessage } from "./helpers.ts";
+import config from "config";
 
 type CommandRegistrationFn = (
   ContextData: RegistrationContext,
@@ -27,7 +28,8 @@ type CommandRegistrationFn = (
 type CommandDescription = RESTPostAPIChatInputApplicationCommandsJSONBody; // This type name is hilarious
 
 export type CommandHandlerOptions = {
-  commandsDir?: string;
+  commandsDir: string;
+  contextData?: ContextData;
 };
 
 export class CommandHandler {
@@ -35,17 +37,18 @@ export class CommandHandler {
   commands: Collection<string, Command> = new Collection();
   restClient: REST;
   contextData: ContextData = {};
+  appId: Snowflake;
 
-  constructor(options: CommandHandlerOptions, contextData?: ContextData) {
-    this.commandsDir = path.join(
-      __dirname,
-      "../",
-      options.commandsDir ?? "commands",
-    );
-    this.contextData = contextData ?? {};
-    this.restClient = new REST({ version: "10" }).setToken(
-      process.env.DISCORD_TOKEN!,
-    );
+  constructor(options: CommandHandlerOptions) {
+    this.commandsDir = options.commandsDir;
+    this.contextData = options.contextData ?? {};
+
+    let token = config.get<string>("discord.token");
+    let appId = atob(token.split(".")[0]); // App ID is the first part of the token, base64 encoded
+
+    this.restClient = new REST({ version: "10" }).setToken(token);
+
+    this.appId = appId;
   }
 
   private async createCommand(
@@ -130,11 +133,10 @@ export class CommandHandler {
     });
 
     await this.restClient.put(
-      Routes.applicationGuildCommands(
-        process.env.APP_ID! as Snowflake,
-        guildId,
-      ),
-      { body: commands },
+      Routes.applicationGuildCommands(this.appId, guildId),
+      {
+        body: commands,
+      },
     );
 
     // Get the name of all commands

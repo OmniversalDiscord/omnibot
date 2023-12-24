@@ -1,8 +1,4 @@
 import pino from "pino";
+import config from "config";
 
-export const logger = pino({
-  transport: {
-    target: "pino-pretty",
-  },
-  level: "debug",
-});
+export const logger = pino(config.get("logging"));

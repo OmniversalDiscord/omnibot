@@ -1,7 +1,9 @@
 import "dotenv/config";
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import { Client, Events, GatewayIntentBits, Snowflake } from "discord.js";
 import { logger } from "./logger.ts";
 import { CommandHandler } from "./framework/CommandHandler.ts";
+import config from "config";
+import path from "path";
 
 const client = new Client({
   intents: [
@@ -17,11 +19,17 @@ const client = new Client({
   ],
 });
 
-const commandHandler = new CommandHandler({});
-await commandHandler.registerCommands(client, "342309270139830272");
+const commandHandler = new CommandHandler({
+  commandsDir: path.join(__dirname, "commands"),
+});
+
+await commandHandler.registerCommands(
+  client,
+  config.get<Snowflake>("discord.guildId"),
+);
 
 client.once(Events.ClientReady, (c) => {
   logger.info(`Connected as ${c.user?.username}`);
 });
 
-await client.login(process.env.DISCORD_TOKEN);
+await client.login(config.get("discord.token"));

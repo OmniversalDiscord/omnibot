@@ -1,0 +1,7 @@
+discord:
+  guildId: "342309270139830272"
+  
+logging:
+  level: debug
+  transport:
+    target: pino-pretty
