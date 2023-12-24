@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Client, Events, GatewayIntentBits, Snowflake } from "discord.js";
 import { logger } from "./logger.ts";
-import { CommandHandler } from "./framework/CommandHandler.ts";
+import { CommandHandler } from "./framework/commandHandler.ts";
 import config from "config";
 import path from "path";
 
