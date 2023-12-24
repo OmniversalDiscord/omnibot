@@ -1,11 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import {
-  CommandBuilder,
-  Context,
-  guardError,
-  guardOk,
-  GuardResult,
-} from "../framework/types.ts";
+import { CommandBuilder, Context } from "../framework/types.ts";
 
 export function register(): CommandBuilder {
   return new SlashCommandBuilder()
@@ -17,14 +11,6 @@ export function register(): CommandBuilder {
         .setDescription("The user to kill")
         .setRequired(true),
     );
-}
-
-export function guard({ interaction }: Context): GuardResult {
-  if (interaction.member!.user.id === "131859790593785856") {
-    guardError("You can't kill the bot owner!");
-  }
-
-  return guardOk();
 }
 
 export default async function kill({ interaction }: Context) {
