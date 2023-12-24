@@ -16,6 +16,6 @@ export function register(): CommandBuilder {
 export default async function kill({ interaction }: Context) {
   const user = interaction.options.getUser("user", true);
   await interaction.reply(
-    `<@${interaction.user}> has been charged with the attempted murder of <@${user}> and is awaiting sentencing.`,
+    `${interaction.user} has been charged with the attempted murder of ${user} and is awaiting sentencing.`,
   );
 }
