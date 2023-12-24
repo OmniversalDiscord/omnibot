@@ -5,3 +5,9 @@ logging:
   level: debug
   transport:
     target: pino-pretty
+    
+commands:
+  resize:
+    channels:
+      - "78120232055708"
+      - "870080534854910045"

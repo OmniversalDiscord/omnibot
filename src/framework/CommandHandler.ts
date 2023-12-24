@@ -68,6 +68,7 @@ export class CommandHandler {
             return;
           }
 
+          context.fromGuard = result.data;
           await commandBody(context);
         }
       : commandBody;
@@ -123,6 +124,7 @@ export class CommandHandler {
     await command({
       interaction: interaction,
       data: this.contextData,
+      fromGuard: null,
     });
   }
 
