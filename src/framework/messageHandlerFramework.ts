@@ -6,14 +6,17 @@ type HandlerFn = (message: Message) => Promise<void>;
 
 type MessageHandlerOptions = {
   handlerDir: string;
+  disabled?: string[];
 };
 
 export class MessageHandlerFramework {
   handlerDir: string;
   handlers: HandlerFn[] = [];
+  disabled: string[];
 
   constructor(options: MessageHandlerOptions) {
     this.handlerDir = options.handlerDir;
+    this.disabled = options.disabled ?? [];
   }
 
   public async registerHandlers(client: Client) {
@@ -25,6 +28,12 @@ export class MessageHandlerFramework {
     for (const file of handlerFiles) {
       const handler = await import(`${this.handlerDir}/${file}`);
       const handlerName = file.split(".")[0];
+
+      if (this.disabled.includes(handlerName)) {
+        logger.debug(`Skipping disabled message handler ${handlerName}`);
+
+        continue;
+      }
 
       if (!handler.default) {
         logger.warn(

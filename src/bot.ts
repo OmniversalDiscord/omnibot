@@ -23,10 +23,12 @@ const client = new Client({
 
 const commandHandler = new CommandFramework({
   commandsDir: path.join(__dirname, "handlers/commands"),
+  disabled: config.get<string[]>("commands.disabled"),
 });
 
 const messageHandler = new MessageHandlerFramework({
   handlerDir: path.join(__dirname, "handlers/messages"),
+  disabled: config.get<string[]>("messageHandlers.disabled"),
 });
 
 const guildId = config.get<Snowflake>("discord.guildId");

@@ -30,11 +30,13 @@ type CommandDescription = RESTPostAPIChatInputApplicationCommandsJSONBody; // Th
 export type CommandHandlerOptions = {
   commandsDir: string;
   contextData?: ContextData;
+  disabled?: string[];
 };
 
 export class CommandFramework {
   commandsDir: string;
   commands: Collection<string, Command> = new Collection();
+  disabled: string[];
   restClient: REST;
   contextData: ContextData = {};
   appId: Snowflake;
@@ -49,6 +51,7 @@ export class CommandFramework {
     this.restClient = new REST({ version: "10" }).setToken(token);
 
     this.appId = appId;
+    this.disabled = options.disabled ?? [];
   }
 
   private async createCommand(
@@ -86,6 +89,7 @@ export class CommandFramework {
 
     for (const file of commandFiles) {
       const commandDefinition = await import(path.join(this.commandsDir, file));
+
       if (!commandDefinition.register || !commandDefinition.default) {
         logger.warn(
           `Command ${file} has no register function and/or default function defined, skipping...`,
@@ -101,6 +105,11 @@ export class CommandFramework {
         commandBody,
         guard,
       );
+
+      if (this.disabled.includes(description.name)) {
+        logger.debug(`Skipping disabled command ${description.name}`);
+        continue;
+      }
 
       this.commands.set(description.name, command);
       commandDescriptions.push(description);
