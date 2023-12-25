@@ -42,8 +42,8 @@ class RoleSectionCache {
         currentSection = role.name.match(this.sectionPattern)![1].toLowerCase();
         currentSectionRoles = [];
       } else {
-        logger.debug(`Adding ${role.name} to ${currentSection}`);
         currentSectionRoles.push(role);
+        logger.debug(`Added ${role.name} to ${currentSection}`);
       }
     }
 

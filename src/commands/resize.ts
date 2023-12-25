@@ -41,12 +41,12 @@ export async function register({
         continue;
       }
 
-      logger.debug(`Adding \`${channel.name}\` to resize...`);
-
       channelOptions.push({
         name: channel.name,
         value: id,
       });
+
+      logger.debug(`Added \`${channel.name}\` to resize options`);
     } catch (e) {
       if (e instanceof DiscordAPIError && e.code === 10003) {
         logger.warn(`Channel with ID \`${id}\` does not exist, skipping...`);
@@ -108,6 +108,7 @@ export default async function resize({ fromGuard, interaction }: Context) {
 
   await channel.edit({ userLimit: newSize });
 
+  logger.debug(`Resized ${channel.name} to ${newSize} members`);
   await interaction.reply({
     embeds: [
       new EmbedBuilder()
