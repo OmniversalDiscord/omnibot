@@ -1,15 +1,7 @@
-# omnibot
+# OmniBot
 
-To install dependencies:
+OmniBot is a comprehensive bot that we use in Omniversal for a variety of functions. Using a bespoke bot avoids the common issue of duplicate commands when many different bots are used together, thus providing a simpler and more cohesive experience.
 
-```bash
-bun install
-```
+The bot is, in parts, intentionally coded to Omniversal, and is not hostable in other servers without modifications.
 
-To run:
-
-```bash
-bun run bot.ts
-```
-
-This project was created using `bun init` in bun v1.0.7. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## Development guide (coming soon)
