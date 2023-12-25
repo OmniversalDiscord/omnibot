@@ -1,0 +1,15 @@
+discord:
+  guildId: "342309270139830272"
+  errorChannel: "342309270139830272"
+
+logging:
+  level: info
+
+messageHandlers:
+  disabled:
+    - santaBot
+
+commands:
+  resize:
+    channels:
+      - "870080534854910045"

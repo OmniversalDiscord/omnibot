@@ -3,6 +3,7 @@
   "module": "src/bot.ts",
   "type": "module",
   "devDependencies": {
+    "@flydotio/dockerfile": "latest",
     "@types/config": "^3.3.3",
     "bun-types": "latest",
     "pino-pretty": "^10.2.3",
