@@ -32,7 +32,7 @@ export type CommandHandlerOptions = {
   contextData?: ContextData;
 };
 
-export class CommandHandler {
+export class CommandFramework {
   commandsDir: string;
   commands: Collection<string, Command> = new Collection();
   restClient: REST;

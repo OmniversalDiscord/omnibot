@@ -5,7 +5,7 @@ import {
   guardError,
   guardOk,
   RegistrationContext,
-} from "../framework/types.ts";
+} from "../../framework/types.ts";
 import config from "config";
 import {
   APIApplicationCommandOptionChoice,
@@ -17,7 +17,7 @@ import {
   Snowflake,
   VoiceChannel,
 } from "discord.js";
-import { logger } from "../logger.ts";
+import { logger } from "../../logger.ts";
 
 export async function register({
   restClient,

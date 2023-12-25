@@ -1,4 +1,4 @@
-import { CommandBuilder, Context } from "../framework/types.ts";
+import { CommandBuilder, Context } from "../../framework/types.ts";
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -12,9 +12,9 @@ import {
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
 } from "discord.js";
-import { roleSectionCache } from "../models/roleSectionCache.ts";
-import { UserColorService } from "../services/userColorService.ts";
-import { logger } from "../logger.ts";
+import { roleSectionCache } from "../../models/roleSectionCache.ts";
+import { UserColorService } from "../../services/userColorService.ts";
+import { logger } from "../../logger.ts";
 
 export const register = (): CommandBuilder =>
   new SlashCommandBuilder()

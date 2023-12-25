@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { CommandBuilder, Context } from "../framework/types.ts";
+import { CommandBuilder, Context } from "../../framework/types.ts";
 
 export function register(): CommandBuilder {
   return new SlashCommandBuilder()
