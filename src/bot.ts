@@ -1,9 +1,10 @@
 import "dotenv/config";
-import { Client, Events, GatewayIntentBits, Snowflake } from "discord.js";
+import { Client, GatewayIntentBits, Snowflake } from "discord.js";
 import { logger } from "./logger.ts";
 import { CommandHandler } from "./framework/commandHandler.ts";
 import config from "config";
 import path from "path";
+import { roleSectionCache } from "./models/roleSectionCache.ts";
 
 const client = new Client({
   intents: [
@@ -23,12 +24,16 @@ const commandHandler = new CommandHandler({
   commandsDir: path.join(__dirname, "commands"),
 });
 
-await commandHandler.registerCommands(
+const guildId = config.get<Snowflake>("discord.guildId");
+await commandHandler.registerCommands(client, guildId);
+
+roleSectionCache.register(
   client,
-  config.get<Snowflake>("discord.guildId"),
+  guildId,
+  RegExp(config.get<string>("roles.sectionPattern")),
 );
 
-client.once(Events.ClientReady, (c) => {
+client.once("ready", (c) => {
   logger.info(`Connected as ${c.user?.username}`);
 });
 
