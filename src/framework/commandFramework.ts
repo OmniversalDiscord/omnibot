@@ -1,8 +1,4 @@
-import type {
-  Interaction,
-  ChatInputCommandInteraction,
-  SlashCommandBuilder,
-} from "discord.js";
+import type { Interaction } from "discord.js";
 import type { RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
 import type { Client, Snowflake } from "discord.js";
 import type {

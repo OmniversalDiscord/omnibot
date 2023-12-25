@@ -23,13 +23,13 @@ export async function register({
   restClient,
 }: RegistrationContext): Promise<CommandBuilder> {
   // Get all resizable channels
-  let channelIds = config.get<Snowflake[]>("commands.resize.channels");
-  let channelOptions: APIApplicationCommandOptionChoice<string>[] = [];
+  const channelIds = config.get<Snowflake[]>("commands.resize.channels");
+  const channelOptions: APIApplicationCommandOptionChoice<string>[] = [];
 
   for (let id of channelIds) {
     try {
       // Just extract the type and name
-      let channel = (await restClient.get(Routes.channel(id))) as {
+      const channel = (await restClient.get(Routes.channel(id))) as {
         type: number;
         name: string;
       };
@@ -78,9 +78,9 @@ export async function register({
 
 export function guard({ interaction }: Context) {
   // Get the member and channel
-  let member = interaction.member! as GuildMember;
-  let channelId = interaction.options.getString("channel", true);
-  let channel = interaction.guild?.channels.cache.get(
+  const member = interaction.member! as GuildMember;
+  const channelId = interaction.options.getString("channel", true);
+  const channel = interaction.guild?.channels.cache.get(
     channelId,
   ) as VoiceChannel;
 
@@ -93,7 +93,7 @@ export function guard({ interaction }: Context) {
   }
 
   // Check if the new size is smaller than the current number of members
-  let newSize = interaction.options.getInteger("size", true);
+  const newSize = interaction.options.getInteger("size", true);
   if (channel.members.size > newSize) {
     return guardError(
       `You cannot resize \`${channel.name}\` to be smaller than the current number of members`,
@@ -104,7 +104,7 @@ export function guard({ interaction }: Context) {
 }
 
 export default async function resize({ fromGuard, interaction }: Context) {
-  let { channel, newSize } = fromGuard as GuardData<typeof guard>;
+  const { channel, newSize } = fromGuard as GuardData<typeof guard>;
 
   await channel.edit({ userLimit: newSize });
 

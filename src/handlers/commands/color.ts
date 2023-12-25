@@ -7,7 +7,6 @@ import {
   GuildMember,
   Message,
   SelectMenuBuilder,
-  SelectMenuInteraction,
   SlashCommandBuilder,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,

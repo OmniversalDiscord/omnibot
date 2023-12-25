@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "discord.js";
 import { CommandBuilder, Context } from "../../framework/types.ts";
 
-export function register(): CommandBuilder {
-  return new SlashCommandBuilder()
+export const register = (): CommandBuilder =>
+  new SlashCommandBuilder()
     .setName("kill")
     .setDescription("Kills a user (scary!)")
     .addUserOption((option) =>
@@ -11,7 +11,6 @@ export function register(): CommandBuilder {
         .setDescription("The user to kill")
         .setRequired(true),
     );
-}
 
 export default async function kill({ interaction }: Context) {
   const user = interaction.options.getUser("user", true);

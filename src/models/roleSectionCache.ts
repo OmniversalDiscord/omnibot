@@ -1,6 +1,5 @@
 import { Client, Role, Snowflake } from "discord.js";
 import { logger } from "../logger.ts";
-import config from "config";
 
 class RoleSectionCache {
   private client!: Client;
@@ -14,7 +13,7 @@ class RoleSectionCache {
     this.sectionPattern = sectionPattern;
 
     // We don't need to bind on role creation because roleUpdate fires when the role is inevitably renamed
-    client.on("ready", this.updateRoleSections.bind(this));
+    client.once("ready", this.updateRoleSections.bind(this));
     client.on("roleUpdate", this.updateRoleSections.bind(this));
     client.on("roleDelete", this.updateRoleSections.bind(this));
   }
