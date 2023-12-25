@@ -1,6 +1,6 @@
 discord:
-  guildId: "342309270139830272"
-  errorChannel: "342309270139830272"
+  guildId: "299346213126275072"
+  errorChannel: "371028953499959296"
 
 logging:
   level: info
@@ -12,4 +12,5 @@ messageHandlers:
 commands:
   resize:
     channels:
-      - "870080534854910045"
+      - "419355451277312000"
+      - "951241315067240448"
