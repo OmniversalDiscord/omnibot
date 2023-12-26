@@ -15,3 +15,5 @@ commands:
   resize:
     channels:
       - "870080534854910045"
+  announce:
+    channel: "342309270139830272"

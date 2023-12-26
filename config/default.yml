@@ -4,3 +4,6 @@ roles:
 commands:
   color:
     roleSection: "colors"
+    
+  announce:
+    roleSection: "pings"
