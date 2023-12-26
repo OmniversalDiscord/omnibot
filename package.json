@@ -20,6 +20,7 @@
     "pino": "^8.16.1"
   },
   "scripts": {
-    "dev": "bun --watch src/bot.ts"
+    "dev": "bun src/bot.ts",
+    "dev:watch": "bun --watch src/bot.ts"
   }
 }
