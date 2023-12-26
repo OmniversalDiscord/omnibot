@@ -54,7 +54,7 @@ export default async function ping(message: Message) {
 
 ### Adding a new command
 
-Commands are more involved than message handlers, but have a similar principle. Create a new file called `<commandName>.ts` in `src/handlers/commands`. All commands **must** export a default function which receives a `Context` object as its only parameter, and a `register` function which optionally receives a `RegistrationContext` parameter, and returns a `SlashCommandBuilder` object. The `register` function can optionally be marked as `async`. Subcommands are not currently supported, but will be once a subcommand is needed. 
+Commands are more involved than message handlers, but have a similar principle. Create a new file called `<commandName>.ts` in `src/handlers/commands`. All commands **must** export a default function which receives a `Context` object as its only parameter, and a `register` function which returns a `SlashCommandBuilder` and optionally receives a `RegistrationContext` parameter. The `register` function can also be marked as `async`. Subcommands are not currently supported, but will be once a subcommand is needed. 
 
 For example, the same "ping" handler from before could be defined as a command as such:
 
@@ -131,7 +131,7 @@ For a more complex example, check out `src/handlers/commands/resize.ts`, whick t
 The logger and config can both be imported if required. OmniBot uses `pico` for logging and `config` for config management.
 
 ```ts
-import {logger} from "../../logger.ts";
+import { logger } from "../../logger.ts";
 import config from "config";
 import { Snowflake } from "discord.js";
 
