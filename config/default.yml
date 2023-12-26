@@ -1,2 +1,6 @@
 roles:
   sectionPattern: ">>> (\\w+) <<<"
+  
+commands:
+  color:
+    roleSection: "colors"

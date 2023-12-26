@@ -14,6 +14,7 @@ import {
 import { roleSectionCache } from "../../models/roleSectionCache.ts";
 import { UserColorService } from "../../services/userColorService.ts";
 import { logger } from "../../logger.ts";
+import config from "config";
 
 export const register = (): CommandBuilder =>
   new SlashCommandBuilder()
@@ -82,7 +83,10 @@ async function getSelection(fromMessage: Message) {
 
 export default async function color({ interaction }: Context) {
   const member = interaction.member! as GuildMember;
-  const colors = roleSectionCache.get("colors");
+  const colors = roleSectionCache.get(
+    config.get<string>("commands.color.roleSection"),
+  );
+
   if (!colors) {
     throw new Error("Color command was called but no color section is defined");
   }
