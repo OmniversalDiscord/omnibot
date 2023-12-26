@@ -22,9 +22,9 @@ Create a new testing bot on Discord via the Developer Portal, then create a new 
 DISCORD_TOKEN=<your bot token>
 ```
 
-Make sure the testing bot has all the permissions it needs, including `applications.commands`
+Make sure the testing bot has all the permissions it needs, including `applications.commands`.
 
-Then you can run the bot with either `npm run dev` or `npm run dev:watch`, the latter of which will reload the bot when you make changes to the code.
+You can run the bot with either `npm run dev` or `npm run dev:watch`, the latter of which will reload the bot when you make changes to the code.
 
 ### Configuration
 
@@ -64,7 +64,7 @@ For example, the same "ping" handler from before could be defined as a command a
 import { SlashCommandBuilder } from "discord.js";
 import { CommandBuilder, Context } from "../../framework/types.ts";
 
-// It's recommanded to annotate with CommandBuilder type
+// It's recommended to annotate with CommandBuilder type
 // to avoid using unsupported SlashCommandBuilder methods
 export const register = (): CommandBuilder => 
   new SlashCommandBuilder()
