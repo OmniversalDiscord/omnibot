@@ -21,11 +21,13 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel
 import net.dv8tion.jda.api.interactions.commands.Command.Choice
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import java.time.Instant
 
 private val logger = KotlinLogging.logger { }
 
 // With help from @freya022
+@EnableConfigurationProperties(ResizeConfig::class)
 @Command
 class ResizeCommand(
     private val config: ResizeConfig,
