@@ -1,5 +1,7 @@
 package co.omniversal.omnibot.bot.filters
 
+import co.omniversal.omnibot.domain.models.OmniversalMember
+import co.omniversal.omnibot.domain.models.UpdateRepository
 import io.github.freya022.botcommands.api.commands.application.ApplicationCommandFilter
 import io.github.freya022.botcommands.api.commands.application.ApplicationCommandInfo
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel
@@ -8,13 +10,20 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
 import org.springframework.stereotype.Service
 
 @Service
-class UserInChannelFilter : ApplicationCommandFilter<String> {
+class UserInChannelFilter(private val memberRepository: UpdateRepository<OmniversalMember, String>) :
+    ApplicationCommandFilter<String> {
     override val global = false
 
-    override fun check(event: GenericCommandInteractionEvent, commandInfo: ApplicationCommandInfo): String? {
+    override suspend fun checkSuspend(
+        event: GenericCommandInteractionEvent,
+        commandInfo: ApplicationCommandInfo
+    ): String? {
         val channel = findChannelFromEvent(event)
 
-        return if (event.member?.voiceState?.channel?.asVoiceChannel() == channel) {
+        val member = memberRepository.findById(event.user.id)
+            ?: throw IllegalStateException("Member repository returned null for ${event.user.id}")
+
+        return if (member.isCoffeeCrew || event.member?.voiceState?.channel?.asVoiceChannel() == channel) {
             null
         } else {
             "You must be in ${channel.name} to use this command"
