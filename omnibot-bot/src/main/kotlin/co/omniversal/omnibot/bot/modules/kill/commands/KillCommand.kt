@@ -20,7 +20,7 @@ class KillCommand : ApplicationCommand() {
             return
         }
 
-        val shouldKill = Random.Default.nextInt(20) == 0
+        val shouldKill = Random.nextInt(20) == 0
 
         if (shouldKill) {
             event.reply("${member.asMention} has been killed by ${event.member.asMention}! :worried:").await()

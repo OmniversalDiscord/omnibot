@@ -5,7 +5,7 @@ import co.omniversal.omnibot.domain.models.roles.ColorRole
 import co.omniversal.omnibot.infrastructure.data.cache.RoleCollectionCache
 import dev.minn.jda.ktx.coroutines.await
 import dev.minn.jda.ktx.interactions.components.row
-import dev.minn.jda.ktx.messages.EmbedBuilder
+import dev.minn.jda.ktx.messages.Embed
 import io.github.freya022.botcommands.api.commands.application.slash.GuildSlashEvent
 import io.github.freya022.botcommands.api.components.Buttons
 import io.github.freya022.botcommands.api.components.SelectMenus
@@ -29,12 +29,12 @@ class ColorPicker(
     ) {
         val colors = roles.getCollection<ColorRole>()
         val colorList = colors.joinToString("\n") { it.asMention }
-        val embed = EmbedBuilder {
+        val embed = Embed {
             title = "Pick a color"
             description = colorList
             color = 0x007FFF
             footer("Use the select menu below to choose your color in chat")
-        }.build()
+        }
 
         val selectMenu = selectMenus.stringSelectMenu().ephemeral {
             noTimeout()

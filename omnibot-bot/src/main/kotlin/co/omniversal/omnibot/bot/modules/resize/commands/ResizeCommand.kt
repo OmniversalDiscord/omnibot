@@ -4,7 +4,7 @@ import co.omniversal.omnibot.bot.extensions.replyError
 import co.omniversal.omnibot.bot.filters.UserInChannelFilter
 import co.omniversal.omnibot.bot.modules.resize.config.ResizeConfig
 import dev.minn.jda.ktx.coroutines.await
-import dev.minn.jda.ktx.messages.EmbedBuilder
+import dev.minn.jda.ktx.messages.Embed
 import io.github.freya022.botcommands.api.commands.CommandPath
 import io.github.freya022.botcommands.api.commands.annotations.Command
 import io.github.freya022.botcommands.api.commands.annotations.Filter
@@ -65,11 +65,11 @@ class ResizeCommand(
 
         channel.manager.setUserLimit(size).await()
 
-        event.replyEmbeds(EmbedBuilder {
+        event.replyEmbeds(Embed {
             title = "Channel resized"
             description = "Resized ${channel.name} to $size ${if (size == 1) "member" else "members"}"
             color = 0x007FFF
             timestamp = Instant.now()
-        }.build()).await()
+        }).await()
     }
 }
