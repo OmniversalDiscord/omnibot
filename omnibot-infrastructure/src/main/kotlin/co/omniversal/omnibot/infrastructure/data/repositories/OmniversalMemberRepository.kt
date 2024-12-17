@@ -1,10 +1,10 @@
 package co.omniversal.omnibot.infrastructure.data.repositories
 
+import co.omniversal.omnibot.domain.models.OmniversalMember
+import co.omniversal.omnibot.domain.models.UpdateRepository
+import co.omniversal.omnibot.domain.models.roles.ColorRole
 import co.omniversal.omnibot.infrastructure.data.cache.RoleCollectionCache
 import co.omniversal.omnibot.infrastructure.services.GuildService
-import co.omniversal.omnitbot.domain.models.OmniversalMember
-import co.omniversal.omnitbot.domain.models.UpdateRepository
-import co.omniversal.omnitbot.domain.models.roles.ColorRole
 import dev.minn.jda.ktx.coroutines.await
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Repository

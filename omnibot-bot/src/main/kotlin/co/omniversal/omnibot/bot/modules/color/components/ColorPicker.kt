@@ -1,8 +1,8 @@
 package co.omniversal.omnibot.bot.modules.color.components
 
+import co.omniversal.omnibot.domain.models.OmniversalMember
+import co.omniversal.omnibot.domain.models.roles.ColorRole
 import co.omniversal.omnibot.infrastructure.data.cache.RoleCollectionCache
-import co.omniversal.omnitbot.domain.models.OmniversalMember
-import co.omniversal.omnitbot.domain.models.roles.ColorRole
 import dev.minn.jda.ktx.coroutines.await
 import dev.minn.jda.ktx.interactions.components.row
 import dev.minn.jda.ktx.messages.EmbedBuilder

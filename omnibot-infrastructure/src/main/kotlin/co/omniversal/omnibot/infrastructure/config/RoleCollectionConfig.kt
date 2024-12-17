@@ -1,7 +1,7 @@
 package co.omniversal.omnibot.infrastructure.config
 
+import co.omniversal.omnibot.domain.models.roles.ColorRole
 import co.omniversal.omnibot.infrastructure.data.cache.RoleCollectionCache
-import co.omniversal.omnitbot.domain.models.roles.ColorRole
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean

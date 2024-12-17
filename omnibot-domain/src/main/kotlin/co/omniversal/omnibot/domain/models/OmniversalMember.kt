@@ -1,6 +1,6 @@
-package co.omniversal.omnitbot.domain.models
+package co.omniversal.omnibot.domain.models
 
-import co.omniversal.omnitbot.domain.models.roles.ColorRole
+import co.omniversal.omnibot.domain.models.roles.ColorRole
 import net.dv8tion.jda.api.entities.Role
 
 class OmniversalMember(

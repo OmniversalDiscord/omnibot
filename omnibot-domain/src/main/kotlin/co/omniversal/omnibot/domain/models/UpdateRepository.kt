@@ -1,4 +1,4 @@
-package co.omniversal.omnitbot.domain.models
+package co.omniversal.omnibot.domain.models
 
 import org.springframework.data.repository.NoRepositoryBean
 import org.springframework.data.repository.Repository

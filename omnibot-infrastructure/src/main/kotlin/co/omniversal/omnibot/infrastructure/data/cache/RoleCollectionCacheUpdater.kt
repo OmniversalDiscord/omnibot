@@ -1,8 +1,8 @@
 package co.omniversal.omnibot.infrastructure.data.cache
 
+import co.omniversal.omnibot.domain.models.roles.ColorRole
 import co.omniversal.omnibot.infrastructure.config.RolesConfig
 import co.omniversal.omnibot.infrastructure.services.GuildService
-import co.omniversal.omnitbot.domain.models.roles.ColorRole
 import io.github.freya022.botcommands.api.core.annotations.BEventListener
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent

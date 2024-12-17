@@ -1,4 +1,4 @@
-package co.omniversal.omnitbot.domain.models.roles
+package co.omniversal.omnibot.domain.models.roles
 
 import net.dv8tion.jda.api.entities.Role
 
