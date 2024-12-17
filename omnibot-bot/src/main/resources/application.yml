@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: OmniBot
+
+omnibot:
+  roles:
+    section-pattern: ">>> (\\w+) <<<"
+    color-section: "colors"
+
+  modules:
+    slash-command-fail:
+      gifs:
+        - "https://cdn.discordapp.com/attachments/342309270139830272/1122859045502595112/caption.gif"
+        - "https://cdn.discordapp.com/attachments/342309270139830272/1122859147608735834/caption.gif"
+        - "https://cdn.discordapp.com/attachments/342309270139830272/1122859273395908618/caption.gif"
+        - "https://cdn.discordapp.com/attachments/342309270139830272/1122859386671468684/caption.gif"
+
+jda:
+  intents:
+    - guild_members
+    - guild_moderation
+    - guild_expressions
+    - guild_voice_states
+    - guild_presences
+    - guild_messages
+    - guild_message_reactions
+    - guild_message_typing
+    - message_content
+    - scheduled_events
+    - guild_message_polls
+    - direct_messages
+
+  cache-flags:
+    - activity
+    - voice_state
+    - emoji
+    - sticker
+    - client_status
+    - member_overrides
+    - role_tags
+    - forum_tags
+    - online_status
+    - scheduled_events
+
+botcommands:
+  application:
+    force-guild-commands: true
+  components:
+    enable: true

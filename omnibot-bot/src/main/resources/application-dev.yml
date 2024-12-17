@@ -1,0 +1,18 @@
+omnibot:
+  guild: "342309270139830272"
+  modules:
+    enabled:
+      - resize
+      - santa-bot
+      - kill
+      - generate
+      - slash-command-fail
+      - color
+    resize:
+      channels:
+        - "870080534854910045"
+
+botcommands:
+  application:
+    cache:
+      check-online: true
