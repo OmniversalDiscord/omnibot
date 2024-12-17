@@ -21,4 +21,14 @@
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
+
+    <springProfile name="dev">
+        <logger name="io.github.freya022.botcommands" level="trace"/>
+        <logger name="co.omniversal.omnibot" level="trace"/>
+    </springProfile>
+
+    <springProfile name="prod">
+        <logger name="io.github.freya022.botcommands" level="info"/>
+        <logger name="co.omniversal.omnibot" level="info"/>
+    </springProfile>
 </configuration>
