@@ -6,6 +6,7 @@ import io.github.freya022.botcommands.api.commands.application.ApplicationComman
 import io.github.freya022.botcommands.api.commands.application.slash.GuildSlashEvent
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.JDASlashCommand
 import io.github.freya022.botcommands.api.commands.application.slash.annotations.SlashOption
+import io.github.freya022.botcommands.api.core.utils.awaitUnit
 import net.dv8tion.jda.api.entities.Member
 import kotlin.random.Random
 
@@ -16,8 +17,7 @@ class KillCommand : ApplicationCommand() {
         if (member.id == event.jda.selfUser.id) {
             val emoji = member.guild.getEmojiById("1009062092281745461")
 
-            event.reply(emoji?.formatted ?: ":boar:").await()
-            return
+            return event.reply(emoji?.formatted ?: ":boar:").awaitUnit()
         }
 
         val shouldKill = Random.nextInt(20) == 0
