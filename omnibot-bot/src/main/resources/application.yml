@@ -1,6 +1,18 @@
 spring:
   application:
     name: OmniBot
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:omnibot;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    hikari:
+      maximum-pool-size: 2
+      leak-detection-threshold: 10000
+  flyway:
+    schemas: bc
+    locations: bc_database_scripts
+    validate-migration-naming: true
+    loggers: slf4j
 
 omnibot:
   roles:
