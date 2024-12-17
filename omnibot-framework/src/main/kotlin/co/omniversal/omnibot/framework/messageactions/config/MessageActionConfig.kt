@@ -8,11 +8,12 @@ import org.springframework.beans.factory.getBeansOfType
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Lazy
+import org.springframework.context.annotation.DependsOn
 
 private val logger = KotlinLogging.logger {}
 
 @Configuration
+@DependsOn("moduleScanner") // We need to scan for modules first
 internal class MessageActionConfig {
     private fun getActionsByType(context: ApplicationContext, type: MessageActionType) =
         context.getBeansOfType<MessageActionHandler>().values.toList().let { actions ->
@@ -22,7 +23,6 @@ internal class MessageActionConfig {
         }
 
     @Bean("moderationActions")
-    @Lazy
     fun moderationActions(context: ApplicationContext): List<MessageActionHandler> {
         val moderationActions = getActionsByType(context, MessageActionType.MODERATION)
         logger.info {
@@ -33,7 +33,6 @@ internal class MessageActionConfig {
     }
 
     @Bean("deleteActions")
-    @Lazy
     fun deleteActions(context: ApplicationContext): List<MessageActionHandler> {
         val deleteActions = getActionsByType(context, MessageActionType.DELETE)
         logger.info {
@@ -44,7 +43,6 @@ internal class MessageActionConfig {
     }
 
     @Bean("replyActions")
-    @Lazy
     fun replyActions(context: ApplicationContext): List<MessageActionHandler> {
         val replyActions = getActionsByType(context, MessageActionType.REPLY)
         logger.info {
