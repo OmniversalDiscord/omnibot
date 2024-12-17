@@ -7,12 +7,10 @@ import co.omniversal.omnibot.framework.messageactions.MessageActionType
 import dev.minn.jda.ktx.coroutines.await
 import io.github.oshai.kotlinlogging.KotlinLogging
 import net.dv8tion.jda.api.entities.Message
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import kotlin.random.Random
 
 private val logger = KotlinLogging.logger {}
 
-@EnableConfigurationProperties(SlashCommandFailConfig::class)
 @MessageAction(MessageActionType.REPLY)
 class SlashCommandFailAction(private val config: SlashCommandFailConfig) : MessageActionHandler {
 
