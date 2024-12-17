@@ -22,18 +22,18 @@ internal class RoleCollectionCacheUpdater(
     private val guildService: GuildService,
 ) {
     @BEventListener
-    fun onGuildReady(event: GuildReadyEvent) = updateCache()
+    suspend fun onGuildReady(event: GuildReadyEvent) = updateCache()
 
     @BEventListener
-    fun onRoleDeleted(event: RoleDeleteEvent) = updateCache()
+    suspend fun onRoleDeleted(event: RoleDeleteEvent) = updateCache()
 
     @BEventListener
-    fun onRolePositionUpdated(event: RoleUpdatePositionEvent) = updateCache()
+    suspend fun onRolePositionUpdated(event: RoleUpdatePositionEvent) = updateCache()
 
     @BEventListener
-    fun onRoleNameUpdated(event: RoleUpdateNameEvent) = updateCache()
+    suspend fun onRoleNameUpdated(event: RoleUpdateNameEvent) = updateCache()
 
-    private fun updateCache() {
+    private suspend fun updateCache() {
         cache.clear()
 
         var currentSectionType: KType? = null
