@@ -1,8 +1,7 @@
 package co.omniversal.omnibot.bot.modules.color.commands
 
 import co.omniversal.omnibot.bot.modules.color.components.ColorPicker
-import co.omniversal.omnibot.domain.models.OmniversalMember
-import co.omniversal.omnibot.domain.models.UpdateRepository
+import co.omniversal.omnibot.infrastructure.data.repositories.OmniversalMemberRepository
 import dev.minn.jda.ktx.coroutines.await
 import io.github.freya022.botcommands.api.commands.annotations.Command
 import io.github.freya022.botcommands.api.commands.application.ApplicationCommand
@@ -15,13 +14,12 @@ private val logger = KotlinLogging.logger { }
 
 @Command
 class ColorCommand(
-    private val memberRepository: UpdateRepository<OmniversalMember, String>,
+    private val memberRepository: OmniversalMemberRepository,
     private val colorPicker: ColorPicker
 ) : ApplicationCommand() {
     @JDASlashCommand(name = "color", description = "Set or clear your color role")
     suspend fun colorCommand(event: GuildSlashEvent) {
-        val member = memberRepository.findById(event.member.id)
-            ?: throw IllegalStateException("Member repository returned null for ${event.member.id}")
+        val member = memberRepository.fromDiscordMember(event.member)
 
         colorPicker.sendPicker(
             event, member,

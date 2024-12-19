@@ -6,24 +6,27 @@ import co.omniversal.omnibot.domain.models.roles.ColorRole
 import co.omniversal.omnibot.infrastructure.data.cache.RoleCollectionCache
 import co.omniversal.omnibot.infrastructure.services.GuildService
 import dev.minn.jda.ktx.coroutines.await
+import net.dv8tion.jda.api.entities.Member
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Repository
 
 @Repository
 @Lazy
-internal class OmniversalMemberRepository(
+class OmniversalMemberRepository
+internal constructor(
     private val guildService: GuildService,
     private val roles: RoleCollectionCache
 ) : UpdateRepository<OmniversalMember, String> {
     override suspend fun findById(id: String): OmniversalMember? {
-        return guildService.guild.getMemberById(id)?.let { member ->
-            val colorRoles = roles.getCollection<ColorRole>()
-            val roleSet = member.roles.map { it.id }.toSet()
-            val color = colorRoles.firstOrNull { roleSet.contains(it.id) }
-            val isCoffeeCrew = member.roles.any { it.name == "Coffee Crew" }
+        return guildService.guild.getMemberById(id)?.let { fromDiscordMember(it) }
+    }
 
-            OmniversalMember(id, member.roles, color, isCoffeeCrew)
-        }
+    suspend fun fromDiscordMember(member: Member): OmniversalMember {
+        val colorRoles = roles.getCollection<ColorRole>()
+        val roleSet = member.roles.map { it.id }.toSet()
+        val color = colorRoles.firstOrNull { roleSet.contains(it.id) }
+
+        return OmniversalMember(member, color)
     }
 
     override suspend fun <S : OmniversalMember> update(entity: S): S {

@@ -14,6 +14,7 @@ class SantaBotAction : MessageActionHandler {
     override suspend fun handles(message: Message): Boolean {
         val member = message.member ?: return false
 
+        // Bypass the member repo for this one because it's a joke module that lasts a couple weeks
         val shouldDelete = member.roles.any { it.name == "Santa" }
                 && !message.contentRaw.contains("hohoho", ignoreCase = true)
 

@@ -1,16 +1,18 @@
 package co.omniversal.omnibot.domain.models
 
 import co.omniversal.omnibot.domain.models.roles.ColorRole
+import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Role
 
+// We break so many DDD rules this way but it's ok for now
 class OmniversalMember(
-    val id: String,
-    roles: List<Role>,
-    color: ColorRole?,
-    val isCoffeeCrew: Boolean
-) {
-    var roles: List<Role> = roles
+    member: Member,
+    color: ColorRole? = null
+) : Member by member {
+    var roles: List<Role> = member.roles
         private set
+
+    val isCoffeeCrew = member.roles.any { it.name == "Coffee Crew" }
 
     var color: ColorRole? = color
         set(value) {

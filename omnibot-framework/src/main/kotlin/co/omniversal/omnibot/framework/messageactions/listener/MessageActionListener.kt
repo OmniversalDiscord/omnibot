@@ -19,6 +19,12 @@ class MessageActionListener(
     @BEventListener
     suspend fun onMessage(messageEvent: MessageReceivedEvent) {
         val message = messageEvent.message
+        
+        if (messageEvent.author.isBot) {
+            logger.debug { "Ignoring message from bot: ${message.contentDisplay}" }
+            return
+        }
+
         if (messageEvent.author == messageEvent.jda.selfUser) {
             logger.debug { "Ignoring message from self: ${message.contentDisplay}" }
             return

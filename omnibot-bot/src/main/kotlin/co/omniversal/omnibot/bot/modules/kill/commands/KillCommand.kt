@@ -15,7 +15,7 @@ class KillCommand : ApplicationCommand() {
     @JDASlashCommand(name = "kill", description = "Kills a member (scary!)")
     suspend fun killCommand(event: GuildSlashEvent, @SlashOption(description = "Member to kill") member: Member) {
         if (member.id == event.jda.selfUser.id) {
-            val emoji = member.guild.getEmojiById("1009062092281745461")
+            val emoji = event.guild.getEmojiById("1009062092281745461")
 
             return event.reply(emoji?.formatted ?: ":boar:").awaitUnit()
         }
