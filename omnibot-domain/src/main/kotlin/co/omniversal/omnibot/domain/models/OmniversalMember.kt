@@ -9,8 +9,12 @@ class OmniversalMember(
     member: Member,
     color: ColorRole? = null
 ) : Member by member {
-    var roles: List<Role> = member.roles
-        private set
+    private var roles: MutableList<Role> = member.roles
+
+    // Ugly, ugly hack
+    override fun getRoles(): MutableList<Role> {
+        return roles.toMutableList()
+    }
 
     val isCoffeeCrew = member.roles.any { it.name == "Coffee Crew" }
 
@@ -18,14 +22,12 @@ class OmniversalMember(
         set(value) {
             val previousColor = field
             field = value
-            val newRoles = roles.toMutableList()
             if (previousColor != null) {
-                newRoles.remove(previousColor)
+                roles.remove(previousColor)
             }
             if (value != null) {
-                newRoles.add(value)
+                roles.add(value)
             }
-            roles = newRoles
         }
 
     fun clearColor() {
